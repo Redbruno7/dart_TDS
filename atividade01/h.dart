@@ -1,10 +1,28 @@
 import 'dart:io';
 
-void main(List<String> args) {
-  stdout.write('Digita a medida em metros: ');
-  double m = double.parse(stdin.readLineSync()!);
+void main() {
+  double? m;
 
-  print('Centímetros: ${m * 100}');
-  print('Milímeltro: ${m * 1000}');
-  print('Quilômetros: ${m / 1000}');
+  while (m == null) {
+    stdout.write('Digite a medida em metros: ');
+    String? entrada = stdin.readLineSync();
+
+    if (entrada == null || entrada.isEmpty) {
+      print('Entrada inválida! Tente novamente.');
+      continue;
+    }
+
+    m = double.tryParse(entrada);
+    if (m == null) {
+      print('Metragem inválida! Tente novamente.');
+    }
+  }
+
+  double cm = m * 100;
+  double mm = m * 1000;
+  double km = m / 1000;
+
+  print('\nCentímetros: ${cm.toStringAsFixed(2)}');
+  print('Milímeltro: ${mm.toStringAsFixed(2)}');
+  print('Quilômetros: ${km.toStringAsFixed(2)}\n');
 }
