@@ -1,15 +1,46 @@
 import 'dart:io';
 
-void main(List<String> args) {
-  stdout.write('Digite o primeiro número: ');
-  double a = double.parse(stdin.readLineSync()!);
+void main() {
+  double? a;
+  double? b;
 
-  stdout.write('Digite o segundo número: ');
-  double b = double.parse(stdin.readLineSync()!);
+  while (a == null) {
+    stdout.write('Digite o valor de A: ');
+    String? entrada = stdin.readLineSync();
 
+    // Tratativa de null safety
+    if (entrada == null || entrada.isEmpty) {
+      print('Entrada inválida! Tente novamente.');
+      continue;
+    }
+
+    // Tentativa de casting
+    a = double.tryParse(entrada);
+    if (a == null) {
+      print('Entrada inválida! Tente novamente.');
+    }
+  }
+
+  while (b == null) {
+    stdout.write('Digite o valor de B: ');
+    String? entrada = stdin.readLineSync();
+
+    if (entrada == null || entrada.isEmpty) {
+      print('Entrada inválida! Tente novamente.');
+      continue;
+    }
+
+    b = double.tryParse(entrada);
+    if (b == null) {
+      print('Entrada inválida! Tente novamente.');
+    }
+  }
+
+  // Cálculo
   if (b == 0) {
     print('ERRO - Não é possível fazer divisão por zero!');
   } else {
-    print('Resultado: ${(a / b).toStringAsFixed(4)}');
+    double divisao = a / b;
+    print('\nResultado: ${divisao.toStringAsFixed(2)}\n');
   }
 }
