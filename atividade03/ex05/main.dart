@@ -8,62 +8,73 @@ void main() {
   while (true) {
     List<int> lista_numeros = [];
 
-    // Ler valores da lista
-    stdout.write(
-      '\nDigite uma lista de números inteiros separados por espaço: ',
-    );
-    String entradaNumeros = (stdin.readLineSync() ?? '').trim();
+    // Validar quantidade de números
+    int? qtd;
+    while (qtd == null) {
+      stdout.write('\nQuantos números deseja inserir na lista? ');
+      String? entradaQtd = stdin.readLineSync();
 
-    if (entradaNumeros.isEmpty) {
-      print('Nenhum número informado.');
+      if (entradaQtd == null || entradaQtd.isEmpty) {
+        print('Entrada inválida! Digite um número maior que 2.');
+        continue;
+      }
+
+      qtd = int.tryParse(entradaQtd);
+      if (qtd == null || qtd < 2) {
+        print('Quantidade inválida! Digite um número maior que 2.');
+        qtd = null;
+      }
+    }
+
+    // Validar números
+    for (int i = 0; i < qtd; i++) {
+      int? n;
+      while (n == null) {
+        stdout.write('${i + 1}º Número: ');
+        String? entradaN = stdin.readLineSync();
+
+        if (entradaN == null || entradaN.isEmpty) {
+          print('Entrada inválida! Digite um número inteiro.');
+          continue;
+        }
+
+        n = int.tryParse(entradaN);
+        if (n == null) {
+          print('Número inválido! Digite um número inteiro.');
+        }
+      }
+
+      lista_numeros.add(n);
+    }
+
+    // Processamento
+    List<int> numeros_unicos = [];
+
+    for (int n in lista_numeros) {
+      if (!numeros_unicos.contains(n)) {
+        numeros_unicos.add(n);
+      }
+    }
+
+    numeros_unicos.sort();
+
+    if (numeros_unicos.length < 2) {
+      print('\nNão é possível determinar o segundo maior valor.');
     } else {
-      List<String> partes = entradaNumeros.split(' ');
-
-      for (var item in partes) {
-        item = item.trim();
-        if (item.isEmpty) continue;
-
-        int? numero = int.tryParse(item);
-        if (numero != null) {
-          lista_numeros.add(numero);
-        } else {
-          print('Valor inválido ignorado: "$item"');
-        }
-      }
-
-      // Processamento
-      if (lista_numeros.length < 2) {
-        print(
-          'É necessário pelo menos dois números distintos para encontrar o segundo maior.',
-        );
-      } else {
-        // Criar uma lista de valores únicos
-        List<int> numeros_unicos = [];
-        for (var n in lista_numeros) {
-          if (!numeros_unicos.contains(n)) numeros_unicos.add(n);
-        }
-
-        if (numeros_unicos.length < 2) {
-          print(
-            'Não há número distinto suficiente para determinar o segundo maior.',
-          );
-        } else {
-          // Ordenar em ordem decrescente
-          numeros_unicos.sort((a, b) => b.compareTo(a));
-
-          // Segundo maior é o segundo elemento da lista ordenada
-          int segundoMaior = numeros_unicos[1];
-
-          print('\nSegundo maior valor distinto: $segundoMaior');
-        }
-      }
+      int segundo_maior = numeros_unicos[numeros_unicos.length - 2];
+      print('\nLista original: $lista_numeros');
+      print('Valores únicos ordenados: $numeros_unicos');
+      print('Segundo maior valor distinto: $segundo_maior');
     }
 
     // Reiniciar sistema
     while (true) {
       stdout.write('\nDeseja repetir? (s/n): ');
-      String resposta = (stdin.readLineSync() ?? '').trim().toLowerCase();
+      String? resposta = stdin.readLineSync();
 
+      if (resposta == null) continue;
+
+      resposta = resposta.toLowerCase();
       if (resposta == 's') {
         print('-' * 80);
         break;

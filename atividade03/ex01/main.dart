@@ -59,7 +59,6 @@ void main() {
     }
 
     print('\nLista original: $lista_numeros');
-
     if (paresMaioresQue10.isEmpty) {
       print('Nenhum número par maior que 10 foi encontrado.');
     } else {
@@ -70,8 +69,11 @@ void main() {
     // Reiniciar sistema
     while (true) {
       stdout.write('\nDeseja repetir? (s/n): ');
-      String resposta = (stdin.readLineSync() ?? '').trim().toLowerCase();
+      String? resposta = stdin.readLineSync();
 
+      if (resposta == null) continue;
+
+      resposta = resposta.toLowerCase();
       if (resposta == 's') {
         print('-' * 80);
         break;
