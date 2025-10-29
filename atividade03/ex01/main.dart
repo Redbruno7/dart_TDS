@@ -5,48 +5,66 @@ import 'dart:io';
 
 void main() {
   while (true) {
+    // Iniciar lista de números inteiros
     List<int> lista_numeros = [];
 
-    // Ler valores dos números da lista
-    stdout.write(
-      '\nDigite uma lista de números inteiros separados por espaço: ',
-    );
-    String entradaNumeros = (stdin.readLineSync() ?? '').trim();
+    // Validar quantidade de números
+    int? qtd;
+    while (qtd == null) {
+      stdout.write('\nQuantos números deseja inserir na lista? ');
+      String? entradaQtd = stdin.readLineSync();
 
-    if (entradaNumeros.isEmpty) {
-      print('Nenhum número informado.');
+      if (entradaQtd == null || entradaQtd.isEmpty) {
+        print('Entrada inválida! Digite um número maior que 0.');
+        continue;
+      }
+
+      qtd = int.tryParse(entradaQtd);
+      if (qtd == null || qtd <= 0) {
+        print('Quantidade inválida! Digite um número maior que 0.');
+        qtd = null;
+      }
+    }
+
+    // Validar números
+    for (int i = 0; i < qtd; i++) {
+      int? n;
+      while (n == null) {
+        stdout.write('${i + 1}º Número : ');
+        String? entradaN = stdin.readLineSync();
+
+        if (entradaN == null || entradaN.isEmpty) {
+          print('Entrada inválida! Digite um número inteiro.');
+          continue;
+        }
+
+        n = int.tryParse(entradaN);
+        if (n == null) {
+          print('Número inválido! Digite um número inteiro.');
+        }
+      }
+
+      lista_numeros.add(n);
+    }
+
+    // Processamento
+    List<int> paresMaioresQue10 = [];
+    int soma = 0;
+
+    for (int n in lista_numeros) {
+      if (n % 2 == 0 && n > 10) {
+        paresMaioresQue10.add(n);
+        soma += n;
+      }
+    }
+
+    print('\nLista original: $lista_numeros');
+
+    if (paresMaioresQue10.isEmpty) {
+      print('Nenhum número par maior que 10 foi encontrado.');
     } else {
-      List<String> partes = entradaNumeros.split(' ');
-
-      for (var item in partes) {
-        item = item.trim();
-        if (item.isEmpty) continue;
-
-        int? numero = int.tryParse(item);
-        if (numero != null) {
-          lista_numeros.add(numero);
-        } else {
-          print('Valor inválido ignorado: "$item"');
-        }
-      }
-
-      // Processamento
-      if (lista_numeros.isEmpty) {
-        print('Nenhum número válido informado.');
-      } else {
-        List<int> pares = [];
-        int soma = 0;
-
-        for (var n in lista_numeros) {
-          if (n % 2 == 0 && n > 10) {
-            pares.add(n);
-            soma += n;
-          }
-        }
-
-        print('\nNúmeros pares maiores que 10: $pares');
-        print('Soma total: $soma');
-      }
+      print('Números pares maiores que 10: $paresMaioresQue10');
+      print('Soma total dos números restantes: $soma');
     }
 
     // Reiniciar sistema
