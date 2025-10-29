@@ -9,45 +9,69 @@ void main() {
   while (true) {
     List<String> lista_palavras = [];
 
-    // Ler palavras da lista
-    stdout.write('\nDigite uma lista de palavras separadas por espaço: ');
-    String entradaPalavras = (stdin.readLineSync() ?? '').trim();
+    // Validar quantidade de palavras
+    int? qtd;
+    while (qtd == null) {
+      stdout.write('\nQuantas palavras deseja inserir na lista? ');
+      String? entradaQtd = stdin.readLineSync();
 
-    if (entradaPalavras.isEmpty) {
-      print('Nenhuma palavra informada.');
-    } else {
-      List<String> partes = entradaPalavras.split(' ');
-
-      for (var palavra in partes) {
-        palavra = palavra.trim();
-        if (palavra.isEmpty) continue;
-        lista_palavras.add(palavra);
+      if (entradaQtd == null || entradaQtd.isEmpty) {
+        print('Entrada inválida! Digite um número maior que 0.');
+        continue;
       }
 
-      // Processamento
-      if (lista_palavras.isEmpty) {
-        print('Nenhuma palavra válida informada.');
-      } else {
-        List<String> filtradas = [];
+      qtd = int.tryParse(entradaQtd);
+      if (qtd == null || qtd < 2) {
+        print('Quantidade inválida! Digite um número maior que 0.');
+        qtd = null;
+      }
+    }
 
-        for (var palavra in lista_palavras) {
-          if (palavra.length > 5 && (palavra[0].toUpperCase() == 'A')) {
-            filtradas.add(palavra);
-          }
+    // Validar palavras
+    for (int i = 0; i < qtd; i++) {
+      String? palavra;
+      while (palavra == null) {
+        stdout.write('${i + 1}ª Palavra: ');
+        String? entradaPalavra = stdin.readLineSync();
+
+        if (entradaPalavra == null || entradaPalavra.trim().isEmpty) {
+          print('Entrada inválida! Digite uma palavra válida.');
+          continue;
         }
 
-        print('\nLista original: $lista_palavras');
-        print(
-          'Palavras filtradas (mais de 5 letras e começam com A): $filtradas',
-        );
+        palavra = entradaPalavra.trim();
       }
+
+      lista_palavras.add(palavra);
+    }
+
+    // Processamento
+    List<String> palavras_filtradas = [];
+
+    for (String p in lista_palavras) {
+      if (p.length > 5 && p.toLowerCase().startsWith('a')) {
+        palavras_filtradas.add(p);
+      }
+    }
+
+    print('\nLista original: $lista_palavras');
+
+    if (palavras_filtradas.isEmpty) {
+      print('Nenhuma palavra atende aos critérios.');
+    } else {
+      print(
+        'Palavras que começam com "A" e têm mais de 5 letras: $palavras_filtradas',
+      );
     }
 
     // Reiniciar sistema
     while (true) {
       stdout.write('\nDeseja repetir? (s/n): ');
-      String resposta = (stdin.readLineSync() ?? '').trim().toLowerCase();
+      String? resposta = stdin.readLineSync();
 
+      if (resposta == null) continue;
+
+      resposta = resposta.toLowerCase();
       if (resposta == 's') {
         print('-' * 80);
         break;
