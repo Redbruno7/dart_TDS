@@ -29,7 +29,7 @@ void main() {
     for (int i = 0; i < qtd; i++) {
       String? palavra;
       while (palavra == null) {
-        stdout.write('${i + 1}ª Palavra: ');
+        stdout.write('\n${i + 1}ª Palavra: ');
         String? entradaPalavra = stdin.readLineSync();
 
         if (entradaPalavra == null || entradaPalavra.trim().isEmpty) {
@@ -47,7 +47,7 @@ void main() {
     for (int i = 0; i < qtd; i++) {
       int? n;
       while (n == null) {
-        stdout.write('${i + 1}º Número: ');
+        stdout.write('\n${i + 1}º Número: ');
         String? entradaN = stdin.readLineSync();
 
         if (entradaN == null || entradaN.isEmpty) {
