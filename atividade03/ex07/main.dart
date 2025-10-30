@@ -26,7 +26,7 @@ void main() {
       }
     }
 
-    // Validar palavras
+    // Validar palavra
     for (int i = 0; i < qtd; i++) {
       String? palavra;
       while (palavra == null) {
@@ -45,24 +45,16 @@ void main() {
     }
 
     // Processamento
-    if (lista_palavras.isEmpty) {
-      print('Nenhuma palavra válida informada.');
-    } else {
-      List<String> palavras_terminam_r = [];
+    List<String> palavras_terminam_r = lista_palavras
+        .where((palavra) => palavra.toLowerCase().endsWith('r'))
+        .toList();
 
-      for (var palavra in lista_palavras) {
-        if (palavra.isNotEmpty &&
-            palavra[palavra.length - 1].toUpperCase() == 'R') {
-          palavras_terminam_r.add(palavra);
-        }
-      }
+    String frase = palavras_terminam_r.join(' ');
 
-      // Criar a frase final separando palavras por espaço
-      String frase = palavras_terminam_r.join(' ');
-
-      print('\nLista original: $lista_palavras');
-      print('Frase final (palavras que terminam com R): $frase');
-    }
+    print('\nLista original: $lista_palavras');
+    print(
+      'Frase final (palavras que terminam com R): ${frase.isEmpty ? 'Nenhuma palavra atende aos critérios.' : frase}',
+    );
 
     // Reiniciar sistema
     while (true) {
