@@ -19,7 +19,7 @@ void main() {
       }
 
       qtd = int.tryParse(entradaQtd);
-      if (qtd == null || qtd < 2) {
+      if (qtd == null || qtd <= 0) {
         print('Quantidade inválida! Digite um número maior que 0.');
         qtd = null;
       }
@@ -44,15 +44,15 @@ void main() {
     }
 
     // Processamento
-    if (lista_palavras.isEmpty) {
-      print('Nenhuma palavra válida informada.');
+    List<int> lista_tamanhos = [];
+
+    for (var palavra in lista_palavras) {
+      lista_tamanhos.add(palavra.length);
+    }
+
+    if (lista_tamanhos.isEmpty) {
+      print('\nNenhuma palavra válida para processar.');
     } else {
-      List<int> lista_tamanhos = [];
-
-      for (var palavra in lista_palavras) {
-        lista_tamanhos.add(palavra.length);
-      }
-
       print('\nLista original: $lista_palavras');
       print('Lista de tamanhos: $lista_tamanhos');
     }

@@ -8,37 +8,63 @@ void main() {
   while (true) {
     List<String> lista_emails = [];
 
-    // Ler emails da lista
-    stdout.write('\nDigite uma lista de emails separados por espaço: ');
-    String entradaEmails = (stdin.readLineSync() ?? '').trim();
+    // Validar quantidade de e-mails
+    int? qtd;
+    while (qtd == null) {
+      stdout.write('\nQuantos e-mails deseja inserir na lista? ');
+      String? entradaQtd = stdin.readLineSync();
 
-    if (entradaEmails.isEmpty) {
-      print('Nenhum email informado.');
-    } else {
-      List<String> partes = entradaEmails.split(' ');
-
-      for (var email in partes) {
-        email = email.trim();
-        if (email.isEmpty) continue;
-        lista_emails.add(email);
+      if (entradaQtd == null || entradaQtd.isEmpty) {
+        print('Entrada inválida! Digite um número maior que 0.');
+        continue;
       }
 
-      // Processamento
-      if (lista_emails.isEmpty) {
-        print('Nenhum email válido informado.');
-      } else {
-        List<String> emails_validos = [];
+      qtd = int.tryParse(entradaQtd);
+      if (qtd == null || qtd <= 0) {
+        print('Quantidade inválida! Digite um número maior que 0.');
+        qtd = null;
+      }
+    }
 
-        for (var email in lista_emails) {
-          int countAt = '@'.allMatches(email).length;
-          if (countAt == 1 && email.endsWith('.com')) {
-            emails_validos.add(email);
-          }
+    // Validar e-mail
+    for (int i = 0; i < qtd; i++) {
+      String? email;
+      while (email == null) {
+        stdout.write('${i + 1}ª Palavra: ');
+        String? entradaEmail = stdin.readLineSync();
+
+        if (entradaEmail == null || entradaEmail.trim().isEmpty) {
+          print('Entrada inválida! Digite um e-mail válido.');
+          continue;
         }
 
-        print('\nLista original: $lista_emails');
-        print('Emails válidos (um "@" e terminam com ".com"): $emails_validos');
+        email = entradaEmail.trim();
       }
+
+      lista_emails.add(email);
+    }
+
+    // Processamento
+    List<String> emails_validos = [];
+
+    for (var email in lista_emails) {
+      int contador_arroba = '@'.allMatches(email).length;
+
+      if (contador_arroba == 1 &&
+          email.contains('@') &&
+          !email.startsWith('@') &&
+          !email.endsWith('@') &&
+          email.toLowerCase().endsWith('.com')) {
+        emails_validos.add(email);
+      }
+    }
+
+    print('\nLista original: $lista_emails');
+
+    if (emails_validos.isEmpty) {
+      print('Nenhum e-mail válido encontrado.');
+    } else {
+      print('Emails válidos (um "@" e terminam com ".com"): $emails_validos');
     }
 
     // Reiniciar sistema

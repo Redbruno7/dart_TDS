@@ -1,17 +1,16 @@
-// Dada uma lista de strings, crie uma única string (frase)
-// concatenando apenas as palavras que terminam com a letra 'R' (maiúscula ou minúscula).
-// As palavras devem ser separadas por um espaço na frase final.
+// ENUNCIADO
 
 import 'dart:io';
 
 void main() {
   while (true) {
     List<String> lista_palavras = [];
+    List<int> lista_numeros = [];
 
     // Validar quantidade de palavras
     int? qtd;
     while (qtd == null) {
-      stdout.write('\nQuantas palavras deseja inserir na lista? ');
+      stdout.write('\nQuantos palavras deseja inserir na lista? ');
       String? entradaQtd = stdin.readLineSync();
 
       if (entradaQtd == null || entradaQtd.isEmpty) {
@@ -44,17 +43,28 @@ void main() {
       lista_palavras.add(palavra);
     }
 
+    // Validar números
+    for (int i = 0; i < qtd; i++) {
+      int? n;
+      while (n == null) {
+        stdout.write('${i + 1}º Número: ');
+        String? entradaN = stdin.readLineSync();
+
+        if (entradaN == null || entradaN.isEmpty) {
+          print('Entrada inválida! Digite um número inteiro.');
+          continue;
+        }
+
+        n = int.tryParse(entradaN);
+        if (n == null) {
+          print('Número inválido! Digite um número inteiro.');
+        }
+      }
+
+      lista_numeros.add(n);
+    }
+
     // Processamento
-    List<String> palavras_terminam_r = lista_palavras
-        .where((palavra) => palavra.toLowerCase().endsWith('r'))
-        .toList();
-
-    String frase = palavras_terminam_r.join(' ');
-
-    print('\nLista original: $lista_palavras');
-    print(
-      'Frase final (palavras que terminam com R): ${frase.isEmpty ? 'Nenhuma palavra atende aos critérios.' : frase}',
-    );
 
     // Reiniciar sistema
     while (true) {

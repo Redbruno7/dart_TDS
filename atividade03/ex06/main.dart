@@ -21,7 +21,7 @@ void main() {
       }
 
       qtd = int.tryParse(entradaQtd);
-      if (qtd == null || qtd < 2) {
+      if (qtd == null || qtd <= 0) {
         print('Quantidade inválida! Digite um número maior que 0.');
         qtd = null;
       }
