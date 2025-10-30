@@ -5,10 +5,6 @@ import 'dart:io';
 void main() {
   while (true) {
 
-    // Ler valor de 
-
-    // Processamento
-
     // Reiniciar sistema
     while (true) {
       stdout.write('\nDeseja repetir? (s/n): ');
@@ -17,7 +13,6 @@ void main() {
       if (resposta == null) continue;
 
       resposta = resposta.toLowerCase();
-
       if (resposta == 's') {
         print('-' * 80);
         break;

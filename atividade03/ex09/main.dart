@@ -44,8 +44,11 @@ void main() {
     // Reiniciar sistema
     while (true) {
       stdout.write('\nDeseja repetir? (s/n): ');
-      String resposta = (stdin.readLineSync() ?? '').trim().toLowerCase();
+      String? resposta = stdin.readLineSync();
 
+      if (resposta == null) continue;
+
+      resposta = resposta.toLowerCase();
       if (resposta == 's') {
         print('-' * 80);
         break;

@@ -8,47 +8,70 @@ void main() {
   while (true) {
     List<String> lista_palavras = [];
 
-    // Ler palavras da lista
-    stdout.write('\nDigite uma lista de palavras separadas por espaço: ');
-    String entradaPalavras = (stdin.readLineSync() ?? '').trim();
+    // Validar quantidade de palavras
+    int? qtd;
+    while (qtd == null) {
+      stdout.write('\nQuantas palavras deseja inserir na lista? ');
+      String? entradaQtd = stdin.readLineSync();
 
-    if (entradaPalavras.isEmpty) {
-      print('Nenhuma palavra informada.');
-    } else {
-      List<String> partes = entradaPalavras.split(' ');
-
-      for (var palavra in partes) {
-        palavra = palavra.trim();
-        if (palavra.isEmpty) continue;
-        lista_palavras.add(palavra);
+      if (entradaQtd == null || entradaQtd.isEmpty) {
+        print('Entrada inválida! Digite um número maior que 0.');
+        continue;
       }
 
-      // Processamento
-      if (lista_palavras.isEmpty) {
-        print('Nenhuma palavra válida informada.');
-      } else {
-        List<String> palavras_terminam_r = [];
+      qtd = int.tryParse(entradaQtd);
+      if (qtd == null || qtd < 2) {
+        print('Quantidade inválida! Digite um número maior que 0.');
+        qtd = null;
+      }
+    }
 
-        for (var palavra in lista_palavras) {
-          if (palavra.isNotEmpty &&
-              palavra[palavra.length - 1].toUpperCase() == 'R') {
-            palavras_terminam_r.add(palavra);
-          }
+    // Validar palavras
+    for (int i = 0; i < qtd; i++) {
+      String? palavra;
+      while (palavra == null) {
+        stdout.write('${i + 1}ª Palavra: ');
+        String? entradaPalavra = stdin.readLineSync();
+
+        if (entradaPalavra == null || entradaPalavra.trim().isEmpty) {
+          print('Entrada inválida! Digite uma palavra válida.');
+          continue;
         }
 
-        // Criar a frase final separando palavras por espaço
-        String frase = palavras_terminam_r.join(' ');
-
-        print('\nLista original: $lista_palavras');
-        print('Frase final (palavras que terminam com R): $frase');
+        palavra = entradaPalavra.trim();
       }
+
+      lista_palavras.add(palavra);
+    }
+
+    // Processamento
+    if (lista_palavras.isEmpty) {
+      print('Nenhuma palavra válida informada.');
+    } else {
+      List<String> palavras_terminam_r = [];
+
+      for (var palavra in lista_palavras) {
+        if (palavra.isNotEmpty &&
+            palavra[palavra.length - 1].toUpperCase() == 'R') {
+          palavras_terminam_r.add(palavra);
+        }
+      }
+
+      // Criar a frase final separando palavras por espaço
+      String frase = palavras_terminam_r.join(' ');
+
+      print('\nLista original: $lista_palavras');
+      print('Frase final (palavras que terminam com R): $frase');
     }
 
     // Reiniciar sistema
     while (true) {
       stdout.write('\nDeseja repetir? (s/n): ');
-      String resposta = (stdin.readLineSync() ?? '').trim().toLowerCase();
+      String? resposta = stdin.readLineSync();
 
+      if (resposta == null) continue;
+
+      resposta = resposta.toLowerCase();
       if (resposta == 's') {
         print('-' * 80);
         break;
