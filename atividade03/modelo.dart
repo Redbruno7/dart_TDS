@@ -7,10 +7,10 @@ void main() {
     List<String> lista_palavras = [];
     List<int> lista_numeros = [];
 
-    // Validar quantidade de palavras
+    // Validar quantidade de ###
     int? qtd;
     while (qtd == null) {
-      stdout.write('\nQuantos palavras deseja inserir na lista? ');
+      stdout.write('\nQuantos ### deseja inserir na lista? ');
       String? entradaQtd = stdin.readLineSync();
 
       if (entradaQtd == null || entradaQtd.isEmpty) {
