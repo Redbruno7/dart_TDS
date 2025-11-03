@@ -8,7 +8,7 @@ void main() {
   while (true) {
     List<int> lista_numeros = [];
 
-    // Validar quantidade de números
+    // Validar quantidade de registros
     int? qtd;
     while (qtd == null) {
       stdout.write('\nQuantos números deseja inserir na lista? ');

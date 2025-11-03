@@ -9,7 +9,7 @@ void main() {
   while (true) {
     List<String> lista_palavras = [];
 
-    // Validar quantidade de palavras
+    // Validar quantidade de registros
     int? qtd;
     while (qtd == null) {
       stdout.write('\nQuantas palavras deseja inserir na lista? ');
