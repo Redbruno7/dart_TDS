@@ -64,7 +64,7 @@ void main() {
         List<double>? notas = aluno['notas'];
 
         if (notas == null || notas.isEmpty) {
-          print('O aluno ${aluno['nome']} não possui notas cadastradas.');
+          print('\nO aluno(a) ${aluno['nome']} não possui notas cadastradas.');
           continue;
         }
 
@@ -86,20 +86,36 @@ void main() {
       }
 
       print('\n=== ALUNOS APROVADOS ===');
-      for (var a in aprovados) {
-        print('${a['nome']} - Média: ${a['media']!.toStringAsFixed(2)}');
+      if (aprovados.isEmpty) {
+        print('Nenhum aluno aprovado.');
+      } else {
+        for (var a in aprovados) {
+          print('${a['nome']} - Média: ${a['media']!.toStringAsFixed(2)}');
+        }
       }
 
       print('\n=== ALUNOS EM RECUPERAÇÃO ===');
-      for (var a in recuperacao) {
-        print('${a['nome']} - Média: ${a['media']!.toStringAsFixed(2)}');
+      if (recuperacao.isEmpty) {
+        print('Nenhum aluno em recuperação.');
+      } else {
+        for (var a in recuperacao) {
+          print('${a['nome']} - Média: ${a['media']!.toStringAsFixed(2)}');
+        }
       }
 
       print('\n=== ALUNOS REPROVADOS ===');
-      for (var a in reprovados) {
-        print('${a['nome']} - Média: ${a['media']!.toStringAsFixed(2)}');
+      if (reprovados.isEmpty) {
+        print('Nenhum aluno reprovado.\n');
+      } else {
+        for (var a in reprovados) {
+          print('${a['nome']} - Média: ${a['media']!.toStringAsFixed(2)}');
+        }
       }
 
+      // Caso geral: se todas as listas estiverem vazias
+      if (aprovados.isEmpty && recuperacao.isEmpty && reprovados.isEmpty) {
+        print('Nenhum aluno foi classificado ainda.\n');
+      }
     } else if (opcao == '3') {
       // Buscar aluno e atualizar notas
       stdout.write('\nDigite o nome do aluno que deseja atualizar: ');
