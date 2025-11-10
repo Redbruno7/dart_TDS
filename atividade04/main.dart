@@ -53,7 +53,6 @@ void main() {
 
       alunos.add({'nome': nome, 'notas': notas});
       print('\nAluno cadastrado com sucesso!\n');
-
     } else if (opcao == '2') {
       // Listagem por desempenho
       List<Map<String, dynamic>> aprovados = [];
@@ -139,7 +138,8 @@ void main() {
           while (true) {
             stdout.write('Degite uma nova nota (ENTER para terminar): ');
             String? entrada_nova_nota = stdin.readLineSync();
-            if (entrada_nova_nota == null || entrada_nova_nota.trim().isEmpty) break;
+            if (entrada_nova_nota == null || entrada_nova_nota.trim().isEmpty)
+              break;
 
             double? nova_nota = double.tryParse(entrada_nova_nota);
             if (nova_nota == null || nova_nota < 0 || nova_nota > 10) {
@@ -158,11 +158,9 @@ void main() {
       if (!encontrado) {
         print('Aluno não encontrado!\n');
       }
-
     } else if (opcao == '4') {
       print('\nEncerrando o sistema...\n');
       break;
-
     } else {
       print('Opção inválida!\n');
     }
