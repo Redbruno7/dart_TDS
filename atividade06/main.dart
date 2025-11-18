@@ -8,9 +8,9 @@ List<String> jogos = [];
 Map<String, String> generos = {};
 Map<String, List<double>> avaliacoes = {};
 
-// ============
+// ===========
 // FUNÇÃO MAIN
-// ============
+// ===========
 void main() {
   while (true) {
     String opcao = menuGenerico('Menu Principal', [
@@ -272,12 +272,13 @@ void programaSorteio() {
     return;
   }
 
-  clear();
-  menuGenerico('Sorteio de Jogo', ['Sortear Agora']);
+  String opcao = menuGenerico('Sorteio de Jogo', ['Sortear Agora']);
 
-  String sorteado = jogos[Random().nextInt(jogos.length)];
+  if (opcao == '1') {
+    String sorteado = jogos[Random().nextInt(jogos.length)];
+    print('\nJogo sorteado: $sorteado');
+  }
 
-  print('\nJogo sorteado: $sorteado');
   esperar();
 }
 
