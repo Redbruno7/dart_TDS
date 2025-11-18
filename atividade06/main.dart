@@ -1,28 +1,24 @@
 import 'dart:io';
 import 'dart:math';
 
-// ==================
+// =================
 // VARIÁVEIS GLOBAIS
-// ==================
+// =================
 List<String> jogos = [];
 Map<String, String> generos = {};
 Map<String, List<double>> avaliacoes = {};
 
+// ============
+// FUNÇÃO MAIN
+// ============
 void main() {
   while (true) {
-    clear();
-
-    print('=' * 70);
-    print('MENU PRINCIPAL');
-    print('=' * 70);
-    print('1 - Cadastro de Jogos');
-    print('2 - Avaliar Jogos');
-    print('3 - Filtrar por Gênero');
-    print('4 - Sorteio de Jogo');
-    print('0 - Sair');
-    print('-' * 70);
-    stdout.write('Escolha uma opção (0-4): ');
-    String? opcao = stdin.readLineSync();
+    String opcao = menuGenerico('Menu Principal', [
+      'Cadastro de Jogos',
+      'Avaliar Jogos',
+      'Filtrar por Gênero',
+      'Sorteio de Jogo',
+    ]);
 
     switch (opcao) {
       case '1':
@@ -41,149 +37,129 @@ void main() {
         print('\nSistema encerrado! Obrigado por utilizar!\n');
         return;
       default:
-        print('Opção inválida');
-        stdout.write('\nPressione ENTER para voltar ao menu...');
-        stdin.readLineSync();
+        erro('Opção inválida!');
     }
   }
 }
 
-// ======================
+// ========================
+// FUNÇÕES UTILITÁRIAS BASE
+// ========================
+
+// Ler entrada
+String lerEntrada(String msg) {
+  stdout.write('$msg ');
+  return stdin.readLineSync()?.trim() ?? '';
+}
+
+// Validar entrada
+String lerNaoVazio(String msg) {
+  while (true) {
+    String valor = lerEntrada(msg);
+    if (valor.isNotEmpty) return valor;
+    erro('Entrada inválida!');
+  }
+}
+
+// Mensagem de erro genérica
+void erro(String msg) {
+  print(msg);
+  esperar();
+}
+
+// Pausa estratégica
+void esperar() {
+  stdout.write('\nPressione ENTER para continuar...');
+  stdin.readLineSync();
+}
+
+// Formatar Título
+String titulo(String texto) {
+  return texto
+      .trim()
+      .split(' ')
+      .map(
+        (p) =>
+            p.isEmpty ? p : p[0].toUpperCase() + p.substring(1).toLowerCase(),
+      )
+      .join(' ');
+}
+
+// Menu genérico
+String menuGenerico(String nome, List<String> opcoes) {
+  clear();
+  print('=' * 70);
+  print(nome.toUpperCase());
+  print('=' * 70);
+
+  for (int i = 0; i < opcoes.length; i++) {
+    print('${i + 1} - ${opcoes[i]}');
+  }
+
+  print('0 - Voltar');
+  print('-' * 70);
+
+  return lerEntrada('Escolha uma opção (0-${opcoes.length}):');
+}
+
+// =====================
 // 1 - CADASTRO DE JOGOS
-// ======================
+// =====================
 void programaCadastro() {
-  void adicionarJogo() {
-    stdout.write('\nNome do jogo: ');
-    String? nome = stdin.readLineSync();
-
-    if (nome == null || nome.isEmpty) {
-      print('Nome inválido!');
-      return;
-    }
-
-    nome = formatarTitulo(nome);
-
-    stdout.write('Gênero do jogo: ');
-    String? genero = stdin.readLineSync();
-
-    if (genero == null || genero.isEmpty) {
-      print('Gênero inválido!');
-      return;
-    }
-
-    genero = formatarTitulo(genero);
-
-    jogos.add(nome);
-    generos[nome] = genero;
-
-    print('"$nome" adicionado com sucesso!');
-  }
-
-  String listarJogos() {
-    if (jogos.isEmpty) return '\nNenhum jogo cadastrado ainda.';
-
-    var ordem = List.from(jogos)..sort();
-    return '\nJogos cadastrados:\n' +
-        ordem.map((j) => '- $j (${generos[j]})').join('\n');
-  }
-
-  void mostrarMenu() {
-    clear();
-    print('=' * 70);
-    print('CADASTRO DE JOGOS');
-    print('=' * 70);
-  }
-
   while (true) {
-    mostrarMenu();
-    print('1 - Adicionar jogo');
-    print('2 - Listar jogos');
-    print('0 - Voltar');
-    print('-' * 70);
-    stdout.write('Escolha uma opção (0-2): ');
-    String? escolha = stdin.readLineSync();
+    String escolha = menuGenerico('Cadastro de Jogos', [
+      'Adicionar jogo',
+      'Listar jogos',
+    ]);
 
-    if (escolha == '1') {
-      adicionarJogo();
-    } else if (escolha == '2') {
-      print(listarJogos());
-    } else if (escolha == '0') {
-      break;
-    } else {
-      print('Opção inválida!');
+    switch (escolha) {
+      case '1':
+        adicionarJogo();
+        break;
+      case '2':
+        listarJogos();
+        break;
+      case '0':
+        return;
+      default:
+        erro('Opção inválida!');
     }
 
-    stdout.write('\nPressione ENTER para voltar ao menu...');
-    stdin.readLineSync();
+    esperar();
   }
 }
 
-// ==================
+void adicionarJogo() {
+  String nome = titulo(lerNaoVazio('Nome do jogo:'));
+  String genero = titulo(lerNaoVazio('Gênero do jogo:'));
+
+  jogos.add(nome);
+  generos[nome] = genero;
+
+  print('\n"$nome" adicionado com sucesso!');
+}
+
+void listarJogos() {
+  if (jogos.isEmpty) {
+    print('\nNenhum jogo cadastrado ainda.');
+    return;
+  }
+
+  print('\nJogos cadastrados:\n');
+  for (var j in List.from(jogos)..sort()) {
+    print('- $j (${generos[j]})');
+  }
+}
+
+// =================
 // 2 - AVALIAR JOGOS
-// ==================
+// =================
 void programaAvaliar() {
-  void adicionarNota() {
-    stdout.write('\nNome do jogo: ');
-    String? jogo = stdin.readLineSync();
-
-    if (jogo == null || jogo.trim().isEmpty) {
-      print('Nome inválido!');
-      return;
-    }
-
-    jogo = formatarTitulo(jogo);
-
-    if (!jogos.contains(jogo)) {
-      print('Jogo não encontrado!');
-      return;
-    }
-
-    stdout.write('Nota (0-10): ');
-    double? nota = double.tryParse(stdin.readLineSync() ?? '');
-
-    if (nota == null || nota < 0 || nota > 10) {
-      print('Nota inválida!');
-      return;
-    }
-
-    avaliacoes.putIfAbsent(jogo, () => []);
-    avaliacoes[jogo]!.add(nota);
-
-    print('Nota registrada para "$jogo"!');
-  }
-
-  double calcularMedia(String jogo) {
-    var notas = avaliacoes[jogo];
-    if (notas == null || notas.isEmpty) return 0.0;
-    return notas.reduce((a, b) => a + b) / notas.length;
-  }
-
-  void mostrarMedia() {
-    if (avaliacoes.isEmpty) {
-      print('\nNenhum jogo avaliado ainda.');
-      return;
-    }
-
-    var ranking = avaliacoes.keys.toList()
-      ..sort((a, b) => calcularMedia(b).compareTo(calcularMedia(a)));
-
-    print('\nRanking de médias (maior - menor):');
-    for (var jogo in ranking) {
-      print('- $jogo - Média: ${calcularMedia(jogo).toStringAsFixed(2)}');
-    }
-  }
-
   while (true) {
-    clear();
-    print('=' * 70);
-    print('AVALIAÇÃO');
-    print('=' * 70);
-    print('1 - Adicionar nota');
-    print('2 - Ver médias');
-    print('0 - Voltar');
-    print('-' * 70);
-    stdout.write('Escolha uma opção (0-2): ');
-    String? opcao = stdin.readLineSync();
+    String opcao = menuGenerico('Avaliação de Jogos', [
+      'Adicionar nota',
+      'Ver médias',
+    ]);
 
     switch (opcao) {
       case '1':
@@ -195,113 +171,119 @@ void programaAvaliar() {
       case '0':
         return;
       default:
-        print('Opção inválida');
+        erro('Opção inválida!');
     }
 
-    stdout.write('\nPressione ENTER para voltar...');
-    stdin.readLineSync();
+    esperar();
   }
 }
 
-// =======================
+void adicionarNota() {
+  String jogo = titulo(lerNaoVazio('\nNome do jogo:'));
+
+  if (!jogos.contains(jogo)) {
+    print('Jogo não encontrado!');
+    return;
+  }
+
+  double? nota;
+
+  while (nota == null || nota < 0 || nota > 10) {
+    nota = double.tryParse(lerEntrada('Nota (0-10):'));
+    if (nota == null || nota < 0 || nota > 10) {
+      print('Nota inválida!');
+    }
+  }
+
+  avaliacoes.putIfAbsent(jogo, () => []);
+  avaliacoes[jogo]!.add(nota);
+
+  print('Nota registrada para "$jogo"!');
+}
+
+double calcularMedia(String jogo) {
+  var notas = avaliacoes[jogo];
+  if (notas == null || notas.isEmpty) return 0.0;
+  return notas.reduce((a, b) => a + b) / notas.length;
+}
+
+void mostrarMedia() {
+  if (avaliacoes.isEmpty) {
+    print('\nNenhum jogo avaliado ainda.');
+    return;
+  }
+
+  var ranking = avaliacoes.keys.toList()
+    ..sort((a, b) => calcularMedia(b).compareTo(calcularMedia(a)));
+
+  print('\nRanking de médias:\n');
+  for (var jogo in ranking) {
+    print('- $jogo - Média: ${calcularMedia(jogo).toStringAsFixed(2)}');
+  }
+}
+
+// ======================
 // 3 - FILTRAR POR GÊNERO
-// =======================
+// ======================
 void programaFiltro() {
-  void filtrarGenero() {
-    if (jogos.isEmpty) {
-      print('\nNenhum jogo cadastrado.');
-      return;
-    }
-
-    stdout.write('\nGênero desejado: ');
-    String? genero = stdin.readLineSync();
-
-    if (genero == null || genero.isEmpty) {
-      print('Gênero inválido!');
-      return;
-    }
-
-    genero = formatarTitulo(genero);
-
-    var filtrados = jogos.where((j) => generos[j] == genero).toList();
-
-    if (filtrados.isEmpty) {
-      print('\nNenhum jogo encontrado para esse gênero.');
-      return;
-    }
-
-    print('\nJogos encontrados:');
-    filtrados.forEach((j) => print('- $j'));
-  }
-
   while (true) {
-    clear();
-    print('=' * 70);
-    print('FILTRAR POR GÊNERO');
-    print('=' * 70);
-    print('1 - Buscar');
-    print('0 - Voltar');
-    print('-' * 70);
-    stdout.write('Escolha uma opção (0-1): ');
-    String? escolha = stdin.readLineSync();
+    String escolha = menuGenerico('Filtro por Gênero', ['Buscar']);
 
-    if (escolha == '1') {
-      filtrarGenero();
-    } else if (escolha == '0') {
-      return;
-    } else {
-      print('Opção inválida!');
+    switch (escolha) {
+      case '1':
+        filtrarGenero();
+        break;
+      case '0':
+        return;
+      default:
+        erro('Opção inválida!');
     }
 
-    stdout.write('\nPressione ENTER para continuar...');
-    stdin.readLineSync();
+    esperar();
   }
 }
 
-// ============
+void filtrarGenero() {
+  if (jogos.isEmpty) {
+    print('\nNenhum jogo cadastrado.');
+    return;
+  }
+
+  String genero = titulo(lerNaoVazio('Gênero desejado:'));
+
+  var filtrados = jogos.where((j) => generos[j] == genero).toList();
+
+  if (filtrados.isEmpty) {
+    print('\nNenhum jogo encontrado para esse gênero.');
+    return;
+  }
+
+  print('\nJogos encontrados:\n');
+  filtrados.forEach((j) => print('- $j'));
+}
+
+// ===========
 // 4 - SORTEIO
-// ============
+// ===========
 void programaSorteio() {
   if (jogos.isEmpty) {
     print('\nNenhum jogo cadastrado.');
-    stdout.write('\nPressione ENTER...');
-    stdin.readLineSync();
+    esperar();
     return;
   }
 
   clear();
-  print('=' * 70);
-  print('SORTEIO DE JOGO');
-  print('=' * 70);
+  menuGenerico('Sorteio de Jogo', ['Sortear Agora']);
 
-  var random = Random();
-  String sorteado = jogos[random.nextInt(jogos.length)];
+  String sorteado = jogos[Random().nextInt(jogos.length)];
 
   print('\nJogo sorteado: $sorteado');
-
-  stdout.write('\nPressione ENTER para voltar...');
-  stdin.readLineSync();
+  esperar();
 }
 
-// ===========================
-// FORMATAR TÍTULOS DOS JOGOS
-// ===========================
-String formatarTitulo(String texto) {
-  if (texto.trim().isEmpty) return texto;
-
-  return texto
-      .trim()
-      .split(' ')
-      .map((palavra) {
-        if (palavra.isEmpty) return palavra;
-        return palavra[0].toUpperCase() + palavra.substring(1).toLowerCase();
-      })
-      .join(' ');
-}
-
-// ============
+// ===========
 // LIMPAR TELA
-// ============
+// ===========
 void clear() {
   print("\x1B[2J\x1B[0;0H");
 }
