@@ -255,9 +255,8 @@ void listarJogos() {
     print("- $jogo (${generos[jogo]})");
   }
 
-  mostrarQuantidadeJogos(); 
+  mostrarQuantidadeJogos();
 }
-
 
 // =================
 // 2 - AVALIAR JOGOS
